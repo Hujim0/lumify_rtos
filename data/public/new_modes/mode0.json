@@ -1,0 +1,23 @@
+{
+    "vars": 
+    [
+        {
+            "name": "color",
+            "type": "CRGB",
+            "val": 0,
+            "id": 0
+        }
+    ],
+    "edges": [ 
+        {
+            "from": {
+                "type": "var_node",
+                "var-id":0,
+                "id": 0
+            },
+            "to": {
+                "type": "out"
+            }
+        }
+    ]
+}
