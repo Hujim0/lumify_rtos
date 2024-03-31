@@ -67,7 +67,7 @@ void WifiManager::connectionTask(void *pvParameters)
 
     WifiManager::raiseWifiEvent(res);
 
-    vTaskDelete(NULL);
+    vTaskDelete(nullptr);
 }
 
 void WifiManager::startAP()
@@ -83,7 +83,7 @@ void WifiManager::createConnectionTask(WifiCredentials *creds)
         10000,
         creds,
         1,
-        NULL,
+        nullptr,
         NETWORK_RUNNING_CORE);
 }
 

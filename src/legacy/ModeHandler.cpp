@@ -104,15 +104,13 @@ void ModeHandler::changeBrightness(int value)
     FastLED.setBrightness(value);
 }
 
-void ModeHandler::setupFastLEDTask(void *pv)
+void ModeHandler::setupFastLED()
 {
     pinMode(STRIP_PIN, OUTPUT);
 
-    FastLED.addLeds<STRIP, STRIP_PIN, COLOR_ORDER>(static_cast<CRGB*>(pv), NUMPIXELS).setCorrection(TypicalLEDStrip);
+    FastLED.addLeds<STRIP, STRIP_PIN, COLOR_ORDER>(leds, NUMPIXELS).setCorrection(TypicalLEDStrip);
+    FastLED.clear(true);
 
-    FastLED.clearData();
-    FastLED.clear();
-    FastLED.show();
 }
 
 void ModeHandler::startUpdateTask()
@@ -125,17 +123,6 @@ void ModeHandler::startUpdateTask()
         MODE_HANDLER_BASE_PRIOPRITY,
         &_updateTaskHandle,
         MODE_HANDLER_CORE_ID);
-}
-
-void ModeHandler::startFastLEDSetupTask() {
-    xTaskCreatePinnedToCore(
-            &setupFastLEDTask,
-            "fastLED_setup_task",
-            2048,
-            leds,
-            10,
-            nullptr,
-            MODE_HANDLER_CORE_ID);
 }
 
 /**

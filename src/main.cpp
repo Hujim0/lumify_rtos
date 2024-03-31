@@ -40,9 +40,9 @@ void setup()
   mmain.wifiSetup();
 
   modeHandler = new ModeHandler();
-  modeHandler->startFastLEDSetupTask();
+  modeHandler->setupFastLED();
   modeHandler->changeMode(0, GetModeArgs(0).c_str());
-  modeHandler->startUpdateTask();
+//  modeHandler->startUpdateTask();
 
   std::shared_ptr<LumifyMode> test;
 
@@ -110,4 +110,83 @@ void handleWebSocket(const char *websocketMessage)
     strcpy(buff, ((char *)websocketMessage));
     modeHandler->pushArgumentThroughTask((void *)buff);
   }
+}
+
+void onPostModeArguments(AsyncWebServerRequest *request, JsonVariant &json)
+{
+    request->send(200);
+
+    int id = request->arg("id").toInt();
+
+    String *jsonString = new String((char *)nullptr);
+//    std::shared_ptr<String> jsonString = std::make_shared<String>();
+    serializeJson(json, *jsonString);
+
+    if (request->hasArg("save"))
+    {
+        SaveModeArgs(id, jsonString->c_str());
+    }
+
+     modeHandler->changeMode(id, jsonString->c_str());
+//    esp_event_post(CHANGE_MODE_EVENT, id, &args_string, sizeof(&args_string), 0);
+
+    if (request->hasArg("save"))
+    {
+        StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> preferences;
+        deserializeJson(preferences, LoadPreferences());
+        preferences["mode"] = id;
+        SavePreferences(&preferences);
+    }
+}
+
+
+void getModeArguments(AsyncWebServerRequest *request)
+{
+    int id = request->arg("id").toInt();
+
+    String args = GetModeArgs(id);
+
+    if (args.isEmpty())
+    {
+        log_e("[ERROR] Invalid mode id: %i", id);
+
+        request->send(404);
+        return;
+    }
+
+    request->send(
+            request->beginResponse(
+                    HTTP_POST,
+                    "text/json",
+                    args));
+
+    if (request->hasArg("change"))
+    {
+         modeHandler->changeMode(id, args.c_str());
+        log_i("posted, id: %i", id);
+    }
+    if (request->hasArg("save"))
+    {
+        SaveModeArgs(id, args.c_str());
+
+        StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> preferences;
+        deserializeJson(preferences, LoadPreferences());
+        preferences["mode"] = id;
+        SavePreferences(&preferences);
+    }
+}
+
+void lightSwitch(AsyncWebServerRequest *request)
+{
+    bool value = request->arg("value") == "true";
+     modeHandler->lightSwitch(value);
+    request->send(200);
+
+    if (request->hasArg("save"))
+    {
+        StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> preferences;
+        deserializeJson(preferences, LoadPreferences());
+        preferences[LIGHT_SWITCH_JSON] = value;
+        SavePreferences(&preferences);
+    }
 }

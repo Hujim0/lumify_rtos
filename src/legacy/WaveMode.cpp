@@ -30,10 +30,14 @@ WaveMode::WaveMode(const char *data, CRGB *_leds)
 {
     updateArgs(data);
     leds = _leds;
+    startUpdateTask();
 }
 
 void WaveMode::updateArgs(const char *data)
 {
+    if (updateTaskHandle != nullptr)
+        vTaskSuspend(updateTaskHandle);
+
     StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> args;
     deserializeJson(args, data);
 
@@ -54,6 +58,8 @@ void WaveMode::updateArgs(const char *data)
     }
 
     args.garbageCollect();
+    if (updateTaskHandle != nullptr)
+        vTaskResume(updateTaskHandle);
 }
 
 void WaveMode::updateArg(const char *arg, const char *value)

@@ -20,3 +20,28 @@ void LumifyMode::printCRGB(const CRGB &color)
 {
     log_i("%i %i %i", (int)color.r, (int)color.g, (int)color.b);
 }
+
+void LumifyMode::updateTask(void *pVoid) {
+
+    auto *mode = static_cast<LumifyMode*>(pVoid);
+
+    for (;;) {
+        mode->update();
+        FastLED.show();
+    }
+}
+
+void LumifyMode::startUpdateTask() {
+    xTaskCreatePinnedToCore(
+            &updateTask,
+            "update_mode_task",
+            1024,
+            this,
+            1,
+            &updateTaskHandle,
+            MODE_HANDLER_CORE_ID);
+}
+
+LumifyMode::~LumifyMode() {
+    vTaskDelete(updateTaskHandle);
+}

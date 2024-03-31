@@ -4,12 +4,17 @@
 #include <main.h>
 #include <ArduinoJson.h>
 
-#define NUMPIXELS 10
+#define NUMPIXELS 300
 
 #define STATIC_DOCUMENT_MEMORY_SIZE 1024
 
+#define MODE_HANDLER_CORE_ID 0
+
 class LumifyMode
 {
+protected:
+    void startUpdateTask();
+
 public:
     const char *SPEED_ARG = "speed";
     const char *INTENSITY_ARG = "intensity";
@@ -26,11 +31,14 @@ public:
     virtual void updateArgs(const char *data) = 0;
     virtual void updateArg(const char *arg, const char *value) = 0;
 
+    TaskHandle_t updateTaskHandle;
+
     CRGB *leds;
 
     static uint32_t toHex(const char *);
     static float removeNegatives(float);
     static int removeNegatives(int);
     static void printCRGB(const CRGB &);
-    virtual ~LumifyMode() = default;
+    static void updateTask(void*);
+    ~LumifyMode();
 };

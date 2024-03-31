@@ -58,9 +58,6 @@ void WebServerWrapper::addLegacyHandlers()
 
     AddWebPageHandler("/changelang", &changeLanguage);
 
-    AddWebPageHandler("/log", [](AsyncWebServerRequest *request)
-                      { request->send(500); });
-
     AddWebPageHandler("/time", [](AsyncWebServerRequest *request)
                       {
     // StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> preferences;
@@ -142,54 +139,6 @@ void homeRedirect(AsyncWebServerRequest *request)
     request->redirect(uri);
 }
 
-void getModeArguments(AsyncWebServerRequest *request)
-{
-
-    int id = request->arg("id").toInt();
-
-    char args_string[MAX_ARGS_LENGTH] = "";
-
-    {
-        String args = GetModeArgs(id);
-
-        strncpy(args_string, args.c_str(), sizeof(args_string));
-        args[0] = 0;
-    }
-
-    if (strcmp(args_string, "") == 0)
-    {
-        {
-            char msg[64];
-            snprintf(msg, sizeof(msg), "[ERROR] Invalid mode id: %i", id);
-            sprintln(msg);
-        }
-
-        request->send(404);
-        return;
-    }
-
-    request->send(
-        request->beginResponse(
-            HTTP_POST,
-            "text/json",
-            args_string));
-
-    if (request->hasArg("change"))
-    {
-        // modeHandler.changeMode(id, args_string);
-        esp_event_post(CHANGE_MODE_EVENT, id, new String(GetModeArgs(id).c_str()), sizeof(&args_string), 0);
-        log_i("posted, id: %i", id);
-    }
-    if (request->hasArg("save"))
-    {
-        SaveModeArgs(id, args_string);
-
-        StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> preferences;
-        deserializeJson(preferences, LoadPreferences());
-        preferences["mode"] = id;
-        SavePreferences(&preferences);
-    }
-}
 
 void getTimeEvents(AsyncWebServerRequest *request, JsonVariant &json)
 {
@@ -209,38 +158,7 @@ void getTimeEvents(AsyncWebServerRequest *request, JsonVariant &json)
     request->send(500);
 }
 
-void onPostModeArguments(AsyncWebServerRequest *request, JsonVariant &json)
-{
-    request->send(200);
 
-    int id = request->arg("id").toInt();
-
-    char args_string[MAX_ARGS_LENGTH] = "";
-
-    {
-        String _json_string((char *)0);
-        serializeJson(json, _json_string);
-        json.clear();
-        strncpy(args_string, _json_string.c_str(), sizeof(args_string));
-        _json_string[0] = 0;
-    }
-
-    if (request->hasArg("save"))
-    {
-        SaveModeArgs(id, args_string);
-    }
-
-    // modeHandler.changeMode(id, json_string);
-//    esp_event_post(CHANGE_MODE_EVENT, id, &args_string, sizeof(&args_string), 0);
-
-    if (request->hasArg("save"))
-    {
-        StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> preferences;
-        deserializeJson(preferences, LoadPreferences());
-        preferences["mode"] = id;
-        SavePreferences(&preferences);
-    }
-}
 void getElements(AsyncWebServerRequest *request)
 {
     char path[64] = "";
@@ -279,22 +197,6 @@ void changeLanguage(AsyncWebServerRequest *request)
     snprintf(uri, sizeof(uri), "/%s/home", lang);
 
     request->redirect(uri);
-}
-
-void lightSwitch(AsyncWebServerRequest *request)
-{
-    bool value = request->arg("value") == "true";
-    // modeHandler.lightSwitch(value);
-    esp_event_post(CHANGE_MODE_EVENT, value ? 0 : 1, NULL, 0, 0);
-    request->send(200);
-
-    if (request->hasArg("save"))
-    {
-        StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> preferences;
-        deserializeJson(preferences, LoadPreferences());
-        preferences[LIGHT_SWITCH_JSON] = value;
-        SavePreferences(&preferences);
-    }
 }
 
 void changeBrightness(AsyncWebServerRequest *request)

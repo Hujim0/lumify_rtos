@@ -28,6 +28,9 @@ reversed(false)
 
 void RainbowMode::updateArgs(const char *data)
 {
+    if (updateTaskHandle != nullptr)
+        vTaskSuspend(updateTaskHandle);
+
     StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> args;
     deserializeJson(args, data);
 
@@ -42,6 +45,8 @@ void RainbowMode::updateArgs(const char *data)
     }
 
     args.garbageCollect();
+    if (updateTaskHandle != nullptr)
+        vTaskResume(updateTaskHandle);
 }
 
 void RainbowMode::updateArg(const char *arg, const char *value)
@@ -59,4 +64,6 @@ RainbowMode::RainbowMode(const char *data, CRGB*_leds)
 {
     leds = _leds;
     updateArgs(data);
+
+    startUpdateTask();
 }

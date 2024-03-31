@@ -15,7 +15,6 @@
 
 #define NAME_OF_MODE_HANDLER_EVENT_LOOP "MODE_HANDLER"
 
-#define MODE_HANDLER_CORE_ID 0
 
 #define MODE_HANDLER_EVENT_LOOP_STACK_SIZE 512
 
@@ -59,13 +58,11 @@ public:
     ~ModeHandler();
     void pushArgumentThroughTask(void *);
 
-    static void setupFastLEDTask(void*);
+    void setupFastLED();
     static void updateTask(void *pv);
     static void streamArgumentReceiverTask(void *pv);
     void startArgumentStreamTask(const char *taskName);
     void deleteArgumentStreamTask();
-
-    void startFastLEDSetupTask();
 };
 
 struct

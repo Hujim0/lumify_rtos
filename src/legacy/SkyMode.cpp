@@ -48,6 +48,9 @@ void SkyMode::update()
 
 void SkyMode::updateArgs(const char *data)
 {
+    if (updateTaskHandle != nullptr)
+        vTaskSuspend(updateTaskHandle);
+
     FastLED.clearData();
 
     StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> args;
@@ -67,6 +70,10 @@ void SkyMode::updateArgs(const char *data)
 
     SKY_COLOR = CHSV(0, 255, 60);
     SUN_COLOR = CRGB(255, 0, 0);
+//
+    if (updateTaskHandle != nullptr)
+        vTaskResume(updateTaskHandle);
+
 }
 void SkyMode::updateArg(const char *arg, const char *value)
 {
