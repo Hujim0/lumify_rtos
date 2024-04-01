@@ -1,5 +1,9 @@
 #include <LumifyMode.h>
 #include <global.h>
+#include "StaticMode.h"
+#include "RainbowMode.h"
+#include "WaveMode.h"
+#include "SkyMode.h"
 
 uint32_t LumifyMode::toHex(const char *hex)
 {
@@ -35,7 +39,7 @@ void LumifyMode::startUpdateTask() {
     xTaskCreatePinnedToCore(
             &updateTask,
             "update_mode_task",
-            1024,
+            5120,
             this,
             1,
             &updateTaskHandle,
@@ -43,5 +47,44 @@ void LumifyMode::startUpdateTask() {
 }
 
 LumifyMode::~LumifyMode() {
+    log_i("deleting task");
     vTaskDelete(updateTaskHandle);
+}
+
+
+/**
+ *
+ * @return nullptr if mode is not found
+ */
+LumifyMode *LumifyMode::createAndStart(int id, const JsonVariant &args, CRGB *_leds) {
+
+    LumifyMode *mode;
+
+    switch (id)
+    {
+        case 0:
+            mode = new StaticMode(_leds);
+            break;
+        case 1:
+            mode = new RainbowMode(_leds);
+            break;
+        case 2:
+            mode = new WaveMode(_leds);
+            break;
+        case 3:
+            mode = new SkyMode(_leds);
+            break;
+        default:
+            return nullptr;
+    }
+
+    mode->updateArgs(args);
+    mode->startUpdateTask();
+
+    return mode;
+}
+
+LumifyMode::LumifyMode(CRGB* _leds)
+:leds(_leds)
+{
 }

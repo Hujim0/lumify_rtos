@@ -34,42 +34,30 @@ private:
     uint8_t _lastBrightness = 0;
 
     TaskHandle_t _argumentStreamTaskHandler = nullptr;
-    TaskHandle_t _changeModeTaskHandler = nullptr;
-
-    TaskHandle_t _updateTaskHandle = nullptr;
 
     QueueHandle_t _argumentsStreamHandler;
     QueueHandle_t _changeModeQueueHandler;
 
 public:
     CRGB *leds = new CRGB[NUMPIXELS];
-    int currentModeId;
+    int currentModeId = -1;
     bool ledState = true;
     void lightSwitch(bool);
     void changeBrightness(int);
-    esp_err_t changeMode(int, const char *);
-    void updateArgsWithJSON(const char *);
+    esp_err_t updateMode(int id, const JsonVariant &args);
+    void updateArgsWithJSONString(const char *);
+    void updateArgsWithJSON(const JsonVariant &args);
     void pushArg(const char *arg, void *data);
-    void update();
-
-    void startUpdateTask();
 
     ModeHandler();
     ~ModeHandler();
     void pushArgumentThroughTask(void *);
 
-    void setupFastLED();
-    static void updateTask(void *pv);
+    void setupFastLED() const;
     static void streamArgumentReceiverTask(void *pv);
     void startArgumentStreamTask(const char *taskName);
     void deleteArgumentStreamTask();
 };
-
-struct
-{
-    const char *jsonArgs;
-    int modeId;
-} ChangeModeEvent_t;
 
 class ArgumentStreamInitializer_t
 {

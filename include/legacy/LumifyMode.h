@@ -28,17 +28,20 @@ public:
 
     /** pure virtual method*/
     virtual void update() = 0;
-    virtual void updateArgs(const char *data) = 0;
+    virtual void updateArgs(const JsonVariant &args) = 0;
     virtual void updateArg(const char *arg, const char *value) = 0;
 
     TaskHandle_t updateTaskHandle;
 
     CRGB *leds;
 
+    static LumifyMode *createAndStart(int id, const JsonVariant &args, CRGB*_leds);
+
     static uint32_t toHex(const char *);
     static float removeNegatives(float);
     static int removeNegatives(int);
     static void printCRGB(const CRGB &);
     static void updateTask(void*);
-    ~LumifyMode();
+    explicit LumifyMode(CRGB*_leds);
+    virtual ~LumifyMode();
 };

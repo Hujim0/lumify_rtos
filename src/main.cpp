@@ -2,6 +2,8 @@
 #include <WebServerWrapper.h>
 #include <ModeHandler.h>
 
+#include "Debug.h"
+
 #include <FileSystemLegacy.h>
 
 Main mmain = Main();
@@ -28,79 +30,86 @@ void wifiConnectionCallback(void *event_handler_arg, esp_event_base_t event_base
     log_e("%s, Something went wrong!", event_base);
   }
 }
+void initializeWithPreferences() {
+    auto doc = FileManager::loadPreferencesDocument();
 
-void setup()
-{
-  FileManager::begin();
+    int id = (*doc)["mode"];
 
-  esp_event_loop_create_default();
+    modeHandler->updateMode(id, std::move(FileManager::getModeArgumentsJSON(id))->as<JsonVariant>());
 
-  esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifiConnectionCallback, NULL);
+    modeHandler->lightSwitch((*doc)["light_switch"]);
+    FastLED.setBrightness((*doc)["brightness"]);
+}
 
-  mmain.wifiSetup();
 
-  modeHandler = new ModeHandler();
-  modeHandler->setupFastLED();
-  modeHandler->changeMode(0, GetModeArgs(0).c_str());
-//  modeHandler->startUpdateTask();
+void setup() {
+    FileManager::begin();
 
-  std::shared_ptr<LumifyMode> test;
+    esp_event_loop_create_default();
 
-  vTaskStartScheduler();
+    esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifiConnectionCallback, NULL);
+
+    Main::wifiSetup();
+
+    modeHandler = new ModeHandler();
+    modeHandler->setupFastLED();
+    initializeWithPreferences();
+
+//    Debug::startDebugHeapTask();
+
+    vTaskStartScheduler();
 }
 
 void loop()
 {
-  // mmain.serverWrapper->update();
 }
 
 void Main::serverInit()
 {
-  serverWrapper = new WebServerWrapper("lumify", 443);
+    serverWrapper = new WebServerWrapper("lumify", 443);
 
-  serverWrapper->addLegacyHandlers();
+    serverWrapper->addLegacyHandlers();
 
-  serverWrapper->beginServerTask();
+    serverWrapper->beginServerTask();
 }
 
-void Main::wifiSetup()
-{
-  try
-  {
-    WifiManager::createConnectionTask(FileManager::createWifiCredentialsFromFile());
-  }
-  catch (const IOException &e)
-  {
-    WifiManager::startAP();
-  }
+void Main::wifiSetup() {
+    auto *creds = new WifiCredentials();
+
+    if (FileManager::writeToWifiCredentialsFromFile(creds) == ESP_OK) {
+        WifiManager::createConnectionTask(creds);
+    }
+    else {
+        WifiManager::startAP();
+    }
 }
 
-char current_stream[64] = "";
+//char current_stream[64] = "";
+String current_stream;
 
 void handleWebSocket(const char *websocketMessage)
 {
   log_i("websocket: %s", websocketMessage);
 
-  if (strcmp(current_stream, "") == 0)
+  if (current_stream.isEmpty())
   {
-
     log_i("websocket: New stream: \"%s\"", websocketMessage);
 
-    strcpy(current_stream, websocketMessage);
+    current_stream = websocketMessage;
 
-    modeHandler->startArgumentStreamTask(current_stream);
+    modeHandler->startArgumentStreamTask(current_stream.c_str());
 
     return;
   }
 
   if (strcmp(websocketMessage, "]") == 0)
   {
-    strcpy(current_stream, "");
-      modeHandler->deleteArgumentStreamTask();
+    current_stream = "";
+    modeHandler->deleteArgumentStreamTask();
     return;
   }
 
-  if (strcmp(current_stream, BRIGHTNESS_JSON) == 0)
+  if (current_stream.equals(BRIGHTNESS_JSON))
   {
     FastLED.setBrightness(atoi(websocketMessage));
   }
@@ -114,28 +123,23 @@ void handleWebSocket(const char *websocketMessage)
 
 void onPostModeArguments(AsyncWebServerRequest *request, JsonVariant &json)
 {
-    request->send(200);
-
     int id = request->arg("id").toInt();
 
-    String *jsonString = new String((char *)nullptr);
-//    std::shared_ptr<String> jsonString = std::make_shared<String>();
-    serializeJson(json, *jsonString);
-
-    if (request->hasArg("save"))
-    {
-        SaveModeArgs(id, jsonString->c_str());
+    esp_err_t error = modeHandler->updateMode(id, json);
+    if (error == ESP_OK) {
+        request->send(200);
+    } else {
+        request->send(404);
+        return;
     }
 
-     modeHandler->changeMode(id, jsonString->c_str());
-//    esp_event_post(CHANGE_MODE_EVENT, id, &args_string, sizeof(&args_string), 0);
-
     if (request->hasArg("save"))
     {
-        StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> preferences;
-        deserializeJson(preferences, LoadPreferences());
-        preferences["mode"] = id;
-        SavePreferences(&preferences);
+        FileManager::saveModeArguments(id, json);
+
+        auto preferences = FileManager::loadPreferencesDocument();
+        (*preferences)["mode"] = id;
+        FileManager::savePreferencesDocument(std::move(preferences));
     }
 }
 
@@ -144,9 +148,9 @@ void getModeArguments(AsyncWebServerRequest *request)
 {
     int id = request->arg("id").toInt();
 
-    String args = GetModeArgs(id);
+    auto args = FileManager::getModeArguments(id);
 
-    if (args.isEmpty())
+    if (args == nullptr)
     {
         log_e("[ERROR] Invalid mode id: %i", id);
 
@@ -158,35 +162,39 @@ void getModeArguments(AsyncWebServerRequest *request)
             request->beginResponse(
                     HTTP_POST,
                     "text/json",
-                    args));
+                    *args));
 
     if (request->hasArg("change"))
     {
-         modeHandler->changeMode(id, args.c_str());
-        log_i("posted, id: %i", id);
+        DynamicJsonDocument doc(512);
+        auto err = deserializeJson(doc, *args);
+        if (!err) {
+            modeHandler->updateMode(id, doc.as<JsonVariant>());
+        }
+        else {
+            log_e("json format error: %s", err.c_str());
+        }
     }
     if (request->hasArg("save"))
     {
-        SaveModeArgs(id, args.c_str());
+        FileManager::saveModeArguments(id, std::move(args));
 
-        StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> preferences;
-        deserializeJson(preferences, LoadPreferences());
-        preferences["mode"] = id;
-        SavePreferences(&preferences);
+        auto preferences = FileManager::loadPreferencesDocument();
+        (*preferences)["mode"] = id;
+        FileManager::savePreferencesDocument(std::move(preferences));
     }
 }
 
 void lightSwitch(AsyncWebServerRequest *request)
 {
     bool value = request->arg("value") == "true";
-     modeHandler->lightSwitch(value);
+    modeHandler->lightSwitch(value);
     request->send(200);
 
     if (request->hasArg("save"))
     {
-        StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> preferences;
-        deserializeJson(preferences, LoadPreferences());
-        preferences[LIGHT_SWITCH_JSON] = value;
-        SavePreferences(&preferences);
+        auto preferences = FileManager::loadPreferencesDocument();
+        (*preferences)[LIGHT_SWITCH_JSON] = value;
+        FileManager::savePreferencesDocument(std::move(preferences));
     }
 }

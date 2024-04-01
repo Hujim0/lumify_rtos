@@ -8,40 +8,25 @@ void StaticMode::update()
     }
 }
 
-
-StaticMode::StaticMode(CRGB *_leds)
+void StaticMode::updateArgs(const JsonVariant &args)
 {
-    leds = _leds;
-    color = CRGB::White;
-}
-
-StaticMode::StaticMode(const char *data,CRGB *_leds)
-{
-    leds = _leds;
-    updateArgs(data);
-
-    startUpdateTask();
-}
-
-void StaticMode::updateArgs(const char *data)
-{
-    if (updateTaskHandle != nullptr)
-        vTaskSuspend(updateTaskHandle);
-
-    StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> args;
-    deserializeJson(args, data);
+//    if (updateTaskHandle != nullptr)
+//        vTaskSuspend(updateTaskHandle);
 
     color = toHex(args[COLOR_ARG].as<const char *>());
-    // color = CRGB::White;
-
-    args.garbageCollect();
-
-    if (updateTaskHandle != nullptr)
-        vTaskResume(updateTaskHandle);
+//
+//    if (updateTaskHandle != nullptr)
+//        vTaskResume(updateTaskHandle);
 }
 
 void StaticMode::updateArg(const char *arg, const char *value)
 {
     if (strcmp(arg, COLOR_ARG) == 0)
         color = toHex(value);
+}
+
+StaticMode::StaticMode(CRGB *_leds)
+: LumifyMode(_leds)
+, color(CRGB::White)
+{
 }

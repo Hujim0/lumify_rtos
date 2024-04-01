@@ -1,72 +1,9 @@
 #include <FileManager.h>
 #include <WifiManager.h>
 
-#define FORMAT_LittleFS_IF_FAILED false
-
-#define CREDENTIALS_PATH "/credentials.txt"
-
 void FileManager::begin()
 {
     LittleFS.begin(FORMAT_LittleFS_IF_FAILED, "");
-}
-
-/**
- * Creates a new instance of WifiCredentials form CREDENTIALS_PATH
- * Needs to be deleted.
- *
- * @throws IOExceptions if file doesn't exists/is empty
- */
-WifiCredentials *FileManager::createWifiCredentialsFromFile()
-{
-    if (!LittleFS.exists(CREDENTIALS_PATH))
-    {
-        throw IOException();
-    }
-
-    File file = LittleFS.open(CREDENTIALS_PATH, "r", false);
-
-    int emptyLinesCount = 0;
-
-    String wifiSSID;
-    String wifiPassword;
-
-    while (wifiSSID.isEmpty() || wifiPassword.isEmpty())
-    {
-        emptyLinesCount += 1;
-
-        String line = file.readStringUntil('\n');
-
-        log_i("%s", line);
-
-        if (emptyLinesCount >= 10)
-        {
-            log_e("Credentials file is empty!");
-            throw IOException();
-        }
-
-        if (line.charAt(0) == ';' || line.isEmpty())
-        {
-            continue;
-        }
-
-        if (wifiSSID.isEmpty())
-        {
-            wifiSSID = line;
-        }
-        else if (wifiPassword.isEmpty())
-        {
-            wifiPassword = line;
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    wifiSSID.trim();
-    wifiPassword.trim();
-
-    return new WifiCredentials(wifiSSID, wifiPassword);
 }
 
 DynamicJsonDocument *FileManager::loadJsonFromFile(const char *path)
@@ -80,4 +17,136 @@ DynamicJsonDocument *FileManager::loadJsonFromFile(const char *path)
     deserializeJson(*doc, str);
 
     return doc;
+}
+
+esp_err_t FileManager::writeToWifiCredentialsFromFile(WifiCredentials *credentials) {
+    if (!LittleFS.exists(CREDENTIALS_PATH)) {
+        return ESP_ERR_NOT_FOUND;
+    }
+
+    File file = LittleFS.open(CREDENTIALS_PATH, "r", false);
+
+    int emptyLinesCount = 0;
+
+    while (credentials->ssid.isEmpty() || credentials->pw.isEmpty())
+    {
+        emptyLinesCount += 1;
+
+        String line = file.readStringUntil('\n');
+        line.trim();
+
+        if (emptyLinesCount >= 10) {
+            log_e("Credentials file is empty!");
+            return ESP_ERR_NOT_FOUND;
+        }
+
+        if (line.charAt(0) == ';' || line.isEmpty()) {
+            continue;
+        }
+
+        if (credentials->ssid.isEmpty()) {
+            credentials->ssid = line;
+        }
+        else if (credentials->pw.isEmpty()) {
+            credentials->pw = line;
+        }
+        else {
+            break;
+        }
+    }
+    return ESP_OK;
+}
+
+std::unique_ptr<String> FileManager::getModeArguments(int id)
+{
+    char path[64];
+    snprintf(path, sizeof(path), MODE_ARGS_PATH, id);
+
+    if (!LittleFS.exists(path))
+        return nullptr;
+
+    File file = LittleFS.open(path, "r");
+
+    std::unique_ptr<String> string(new String(file.readString()));
+    file.close();
+
+    return string;
+}
+
+void FileManager::saveModeArguments(int id, std::unique_ptr<String> str) {
+    char path[64];
+    snprintf(path, sizeof(path), MODE_ARGS_PATH, id);
+
+    File file = LittleFS.open(path, "r");
+    file.print(*str);
+    file.close();
+}
+
+std::unique_ptr<String> FileManager::loadPreferencesString()
+{
+    if (!LittleFS.exists(PREFERENCES_PATH))
+        return nullptr;
+
+    File file = LittleFS.open(PREFERENCES_PATH, "r");
+
+    std::unique_ptr<String> string(new String(file.readString()));
+    file.close();
+    return string;
+}
+
+std::unique_ptr<DynamicJsonDocument> FileManager::loadPreferencesDocument()
+{
+    if (!LittleFS.exists(PREFERENCES_PATH))
+        return nullptr;
+
+    File file = LittleFS.open(PREFERENCES_PATH, "r");
+
+    std::unique_ptr<DynamicJsonDocument> jsonDocument(new DynamicJsonDocument(512));
+
+    auto err = deserializeJson(*jsonDocument, file);
+
+    if (err) {
+        log_e("%s", err.c_str());
+        return nullptr;
+    }
+
+    file.close();
+    return jsonDocument;
+}
+
+std::unique_ptr<DynamicJsonDocument> FileManager::getModeArgumentsJSON(int id) {
+    char path[64];
+    snprintf(path, sizeof(path), MODE_ARGS_PATH, id);
+
+    if (!LittleFS.exists(path))
+        return nullptr;
+
+    File file = LittleFS.open(path, "r");
+
+    std::unique_ptr<DynamicJsonDocument> jsonDocument(new DynamicJsonDocument(512));
+    auto err = deserializeJson(*jsonDocument, file);
+    file.close();
+
+    if (err) {
+        log_e("%s", err.c_str());
+        return nullptr;
+    }
+
+    return jsonDocument;
+
+}
+
+void FileManager::savePreferencesDocument(std::unique_ptr<DynamicJsonDocument> doc) {
+    File file = LittleFS.open(PREFERENCES_PATH, "w");
+
+    serializeJson(*doc, file);
+    file.close();
+}
+
+void FileManager::saveModeArguments(int id, const JsonVariant &var) {
+    char path[64];
+    snprintf(path, sizeof(path), MODE_ARGS_PATH, id);
+    File file = LittleFS.open(path, "r");
+    serializeJson(var, file);
+    file.close();
 }

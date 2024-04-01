@@ -16,63 +16,57 @@ const CRGB SUNRISE_SUN_COLOR = CRGB(255, 0, 0);
 
 void SkyMode::update()
 {
-    if (edit_mode)
+    if (editMode)
     {
-        ShowEditMode();
+        showEditMode();
         return;
     }
 
-    if (millis() < sunrise_start_time)
+    if (millis() < sunriseStartTimeMillis)
         return;
 
-    SecondsSinceSunriseStart = (float)(millis() - sunrise_start_time) / (1000.0F * (2.1F - speed));
+    float secondsSinceSunriseStart = (float)(millis() - sunriseStartTimeMillis) / (1000.0F * (2.1F - speed));
 
     // initial sunrise light
-    if (SecondsSinceSunriseStart <= SECONDS_BEFORE_SKY_SHOWS)
+    if (secondsSinceSunriseStart <= SECONDS_BEFORE_SKY_SHOWS)
     {
-        ShowSunriseLight(SecondsSinceSunriseStart);
+        showSunriseLight(secondsSinceSunriseStart);
     }
 
-    if (SecondsSinceSunriseStart >= SECONDS_BEFORE_SUN_STARTS_TO_SHOW)
+    if (secondsSinceSunriseStart >= SECONDS_BEFORE_SUN_STARTS_TO_SHOW)
     {
         const float DELAY = 0.0F;
 
-        if (SecondsSinceSunriseStart - SECONDS_BEFORE_SUN_STARTS_TO_SHOW > DELAY && SecondsSinceSunriseStart - SECONDS_BEFORE_SUN_STARTS_TO_SHOW < DELAY + 60.0F)
+        if (secondsSinceSunriseStart - SECONDS_BEFORE_SUN_STARTS_TO_SHOW > DELAY && secondsSinceSunriseStart - SECONDS_BEFORE_SUN_STARTS_TO_SHOW < DELAY + 60.0F)
         {
-            TiltColors(SecondsSinceSunriseStart - SECONDS_BEFORE_SUN_STARTS_TO_SHOW - DELAY);
+            tiltColors(secondsSinceSunriseStart - SECONDS_BEFORE_SUN_STARTS_TO_SHOW - DELAY);
         }
 
-        ShowSunriseSun(SecondsSinceSunriseStart - SECONDS_BEFORE_SUN_STARTS_TO_SHOW);
+        showSunriseSun(secondsSinceSunriseStart - SECONDS_BEFORE_SUN_STARTS_TO_SHOW);
     }
 }
 
-void SkyMode::updateArgs(const char *data)
+void SkyMode::updateArgs(const JsonVariant &args)
 {
-    if (updateTaskHandle != nullptr)
-        vTaskSuspend(updateTaskHandle);
+//    if (updateTaskHandle != nullptr)
+//        vTaskSuspend(updateTaskHandle);
 
     FastLED.clearData();
 
-    StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> args;
-    deserializeJson(args, data);
-
-    edit_mode = args[EDIT_ARG].as<bool>();
-    sunrise_start_time = millis() + MILLIS_BEFORE_SUNRISE_START;
-    SecondsSinceSunriseStart = 0.0F;
-    sunrise_point = args[START_ARG].as<int>();
-    sunset_point = args[END_ARG].as<int>();
+    editMode = args[EDIT_ARG].as<bool>();
+    sunriseStartTimeMillis = millis() + MILLIS_BEFORE_SUNRISE_START;
+    sunrisePoint = args[START_ARG].as<int>();
+    sunsetPoint = args[END_ARG].as<int>();
     speed = args[SPEED_ARG].as<float>();
 
     // Serial.print("sunrise start: ");
-    // Serial.println(sunrise_start_time);
-
-    args.garbageCollect();
+    // Serial.println(sunriseStartTimeMillis);
 
     SKY_COLOR = CHSV(0, 255, 60);
     SUN_COLOR = CRGB(255, 0, 0);
-//
-    if (updateTaskHandle != nullptr)
-        vTaskResume(updateTaskHandle);
+////
+//    if (updateTaskHandle != nullptr)
+//        vTaskResume(updateTaskHandle);
 
 }
 void SkyMode::updateArg(const char *arg, const char *value)
@@ -82,28 +76,22 @@ void SkyMode::updateArg(const char *arg, const char *value)
         speed = atof(value);
     }
 }
-SkyMode::SkyMode(const char *data, CRGB *_leds)
+void SkyMode::showEditMode()
 {
-    leds = _leds;
-    updateArgs(data);
+    if (sunrisePoint != 0)
+        leds[sunrisePoint - 1] = CRGB(64, 64, 0);
+
+    leds[sunrisePoint] = CRGB(255, 255, 0);
+    leds[sunrisePoint + 1] = CRGB(64, 64, 0);
+
+    if (sunsetPoint != NUMPIXELS)
+        leds[sunsetPoint + 1] = CRGB(64, 0, 0);
+
+    leds[sunsetPoint] = CRGB(255, 0, 0);
+    leds[sunsetPoint - 1] = CRGB(64, 0, 0);
 }
 
-void SkyMode::ShowEditMode()
-{
-    if (sunrise_point != 0)
-        leds[sunrise_point - 1] = CRGB(64, 64, 0);
-
-    leds[sunrise_point] = CRGB(255, 255, 0);
-    leds[sunrise_point + 1] = CRGB(64, 64, 0);
-
-    if (sunset_point != NUMPIXELS)
-        leds[sunset_point + 1] = CRGB(64, 0, 0);
-
-    leds[sunset_point] = CRGB(255, 0, 0);
-    leds[sunset_point - 1] = CRGB(64, 0, 0);
-}
-
-void SkyMode::ShowSunriseLight(float SecondsSinceSunriseStart)
+void SkyMode::showSunriseLight(float SecondsSinceSunriseStart)
 {
     float phase = (SecondsSinceSunriseStart / SECONDS_BEFORE_SKY_SHOWS);
 
@@ -120,7 +108,7 @@ void SkyMode::ShowSunriseLight(float SecondsSinceSunriseStart)
     }
 }
 
-void SkyMode::ShowSunriseSun(float SecondsSinceSunriseStart)
+void SkyMode::showSunriseSun(float SecondsSinceSunriseStart)
 {
     float phase = ((SecondsSinceSunriseStart) / SECONDS_BEFORE_SUN_FULLY_CAME_OUT);
 
@@ -129,14 +117,14 @@ void SkyMode::ShowSunriseSun(float SecondsSinceSunriseStart)
 
     float SunOffset = SecondsSinceSunriseStart * 0.075F;
 
-    // for (int i = sunrise_point + floor(SunOffset); i < sunrise_point + SUN_RADIUS + 3 + floor(SunOffset); i++)
+    // for (int i = sunrisePoint + floor(SunOffset); i < sunrisePoint + SUN_RADIUS + 3 + floor(SunOffset); i++)
     for (int i = 0; i < NUMPIXELS; i++)
     {
-        if (i < sunrise_point + floor(SunOffset) - (SUN_RADIUS + 1) || i > sunrise_point + floor(SunOffset) + (SUN_RADIUS + 1))
+        if (i < sunrisePoint + floor(SunOffset) - (SUN_RADIUS + 1) || i > sunrisePoint + floor(SunOffset) + (SUN_RADIUS + 1))
             continue;
 
-        float sunAlpha = cos((((float)(i - sunrise_point) / (float)SUN_RADIUS) * HALF_PI) - SunOffset * (HALF_PI / SUN_RADIUS)); // to simulate that sun is a sphere
-        // float sunAlpha = cos((((float)(i - sunrise_point) * HALF_PI) - SunOffset) / SUN_RADIUS); // to simulate that sun is a sphere
+        float sunAlpha = cos((((float)(i - sunrisePoint) / (float)SUN_RADIUS) * HALF_PI) - SunOffset * (HALF_PI / SUN_RADIUS)); // to simulate that sun is a sphere
+        // float sunAlpha = cos((((float)(i - sunrisePoint) * HALF_PI) - SunOffset) / SUN_RADIUS); // to simulate that sun is a sphere
 
         if (sunAlpha < 0.0F)
             sunAlpha = 0.0F;
@@ -154,7 +142,7 @@ void SkyMode::ShowSunriseSun(float SecondsSinceSunriseStart)
     }
 }
 
-void SkyMode::TiltColors(float SecondsSinceSunriseStart)
+void SkyMode::tiltColors(float SecondsSinceSunriseStart)
 {
 
     float phase = (SecondsSinceSunriseStart) * 0.125F;
@@ -180,4 +168,9 @@ void SkyMode::TiltColors(float SecondsSinceSunriseStart)
     {
         leds[i] = SKY_COLOR;
     }
+}
+
+SkyMode::SkyMode(CRGB *_leds)
+: LumifyMode(_leds)
+{
 }

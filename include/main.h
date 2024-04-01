@@ -19,7 +19,7 @@ public:
 
     void serverInit();
 
-    void wifiSetup();
+    static void wifiSetup();
 };
 
 void handleWebSocket(const char *websocketMessage);

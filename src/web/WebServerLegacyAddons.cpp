@@ -206,10 +206,9 @@ void changeBrightness(AsyncWebServerRequest *request)
 
     if (request->hasArg("save"))
     {
-        StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> preferences;
-        deserializeJson(preferences, LoadPreferences());
-        preferences[BRIGHTNESS_JSON] = value;
-        SavePreferences(&preferences);
+        auto preferences = FileManager::loadPreferencesDocument();
+        (*preferences)[BRIGHTNESS_JSON] = value;
+        FileManager::savePreferencesDocument(std::move(preferences));
     }
     request->send(200);
 }

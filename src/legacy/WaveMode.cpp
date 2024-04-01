@@ -26,20 +26,10 @@ void WaveMode::update()
     offset += speed * (((length + 1.0F) * 2) / 255.0F); // to make it the same as in rainbow mode
 }
 
-WaveMode::WaveMode(const char *data, CRGB *_leds)
+void WaveMode::updateArgs(const JsonVariant &args)
 {
-    updateArgs(data);
-    leds = _leds;
-    startUpdateTask();
-}
-
-void WaveMode::updateArgs(const char *data)
-{
-    if (updateTaskHandle != nullptr)
-        vTaskSuspend(updateTaskHandle);
-
-    StaticJsonDocument<STATIC_DOCUMENT_MEMORY_SIZE> args;
-    deserializeJson(args, data);
+//    if (updateTaskHandle != nullptr)
+//        vTaskSuspend(updateTaskHandle);
 
     color = toHex(args[COLOR_ARG].as<const char *>());
 
@@ -56,10 +46,9 @@ void WaveMode::updateArgs(const char *data)
     {
         speed = abs(speed) * -1.0F;
     }
-
-    args.garbageCollect();
-    if (updateTaskHandle != nullptr)
-        vTaskResume(updateTaskHandle);
+//
+//    if (updateTaskHandle != nullptr)
+//        vTaskResume(updateTaskHandle);
 }
 
 void WaveMode::updateArg(const char *arg, const char *value)
@@ -78,15 +67,7 @@ void WaveMode::updateArg(const char *arg, const char *value)
         color = toHex(value);
 }
 
-WaveMode::WaveMode(CRGB*_leds)
+WaveMode::WaveMode(CRGB *_leds)
+: LumifyMode(_leds)
 {
-    leds = _leds;
-
-    color = CRGB::White;
-
-    speed = 10;
-    intensity = 90;
-    length = 10;
-
-    reversed = false;
 }

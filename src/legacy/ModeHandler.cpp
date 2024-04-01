@@ -33,65 +33,41 @@ void ModeHandler::lightSwitch(bool state)
     FastLED.setBrightness(_lastBrightness);
 }
 
-esp_err_t ModeHandler::changeMode(int id, const char *args)
+esp_err_t ModeHandler::updateMode(int id, const JsonVariant &args)
 {
-
-    if (_updateTaskHandle != nullptr)
-    {
-        vTaskSuspend(_updateTaskHandle);
+    if (currentModeId == id) {
+        updateArgsWithJSON(args);
+        return ESP_OK;
     }
 
-    FastLED.clearData();
+    LumifyMode *mode = LumifyMode::createAndStart(id, args, leds);
 
-    currentModeId = id;
-
-    delete _currentMode;
-
-    switch (id)
-    {
-    case 0:
-        _currentMode = new StaticMode(args, leds);
-        break;
-    case 1:
-        _currentMode = new RainbowMode(args, leds);
-        break;
-    case 2:
-        _currentMode = new WaveMode(args, leds);
-        break;
-    case 3:
-        _currentMode = new SkyMode(args, leds);
-        break;
-    default:
-        log_e("Mode by the id: %i is not found!", id);
-        if (_updateTaskHandle != nullptr)
-        {
-            vTaskResume(_updateTaskHandle);
-        }
+    if (mode == nullptr) {
+        log_e("Failed to create new mode: The id: %i is not found!", id);
         return ESP_ERR_NOT_FOUND;
     }
 
-    if (_updateTaskHandle != nullptr)
-    {
-        vTaskResume(_updateTaskHandle);
-    }
+    FastLED.clearData();
+    currentModeId = id;
+
+    delete _currentMode;
+    _currentMode = mode;
 
     log_i("Changed mode to id: %i", id);
     return ESP_OK;
 }
 
-void ModeHandler::update()
+void ModeHandler::updateArgsWithJSONString(const char *data)
 {
-    if (_currentMode != nullptr && ledState)
-    {
-        _currentMode->update();
+    if (_currentMode != nullptr) {
+        DynamicJsonDocument doc(1024);
+        DeserializationError err = deserializeJson(doc, data);
 
-        FastLED.show();
+        if (!err)
+            _currentMode->updateArgs(doc.as<JsonVariant>());
+        else
+            log_e("%s", err.c_str());
     }
-}
-void ModeHandler::updateArgsWithJSON(const char *data)
-{
-    if (_currentMode != nullptr)
-        _currentMode->updateArgs(data);
 }
 void ModeHandler::pushArg(const char *arg, void *value)
 {
@@ -99,43 +75,13 @@ void ModeHandler::pushArg(const char *arg, void *value)
         _currentMode->updateArg(arg, (char *)value);
 }
 
-void ModeHandler::changeBrightness(int value)
-{
-    FastLED.setBrightness(value);
-}
-
-void ModeHandler::setupFastLED()
+void ModeHandler::setupFastLED() const
 {
     pinMode(STRIP_PIN, OUTPUT);
 
     FastLED.addLeds<STRIP, STRIP_PIN, COLOR_ORDER>(leds, NUMPIXELS).setCorrection(TypicalLEDStrip);
     FastLED.clear(true);
 
-}
-
-void ModeHandler::startUpdateTask()
-{
-    xTaskCreatePinnedToCore(
-        &updateTask,
-        "mode_handler_update_task",
-        10240,
-        this,
-        MODE_HANDLER_BASE_PRIOPRITY,
-        &_updateTaskHandle,
-        MODE_HANDLER_CORE_ID);
-}
-
-/**
- * @param pv ModeHandler pointer
- */
-void ModeHandler::updateTask(void *pv)
-{
-    auto *modeHandler = static_cast<ModeHandler *>(pv);
-
-    for (;;)
-    {
-        modeHandler->update();
-    }
 }
 
 /**
@@ -195,7 +141,7 @@ void ModeHandler::deleteArgumentStreamTask()
 }
 
 ModeHandler::ModeHandler()
-    :_changeModeQueueHandler(xQueueCreate(1, sizeof(ChangeModeEvent_t)))
+//    :_changeModeQueueHandler(xQueueCreate(1, sizeof(ChangeModeEvent_t)))
 {
 }
 
@@ -209,6 +155,11 @@ ModeHandler::~ModeHandler()
     deleteArgumentStreamTask();
 
     delete _currentMode;
+}
+
+void ModeHandler::updateArgsWithJSON(const JsonVariant &args) {
+    if (_currentMode != nullptr)
+        _currentMode->updateArgs(args);
 }
 
 ArgumentStreamInitializer_t::ArgumentStreamInitializer_t(ModeHandler *pModeHandler, const char *name)

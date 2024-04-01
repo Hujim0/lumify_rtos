@@ -13,7 +13,7 @@ private:
     void OnNewEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type,
                     void *arg, uint8_t *data, size_t len);
 
-    void handleWebSocketMessage(void *arg, uint8_t *data, size_t len, AsyncWebSocket *socket);
+    void handleWebSocketMessage(void *arg, uint8_t *data, size_t len, AsyncWebSocket *socket) const;
 
     // String buffer;
     // uint64_t buffer_size;

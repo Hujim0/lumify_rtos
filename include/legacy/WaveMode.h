@@ -5,19 +5,19 @@
 class WaveMode : public LumifyMode
 {
 private:
-    CRGB color;
+    CRGB color{};
 
-    float offset;
+    float offset{};
 
-    float speed;
-    float length;
-    float intensity;
-    bool reversed;
+    float speed{};
+    float length{};
+    float intensity{};
+    bool reversed{};
 
 public:
     void update() override;
-    void updateArgs(const char *) override;
+    void updateArgs(const JsonVariant &args) override;
     void updateArg(const char *arg, const char *value) override;
-    WaveMode(CRGB*);
-    WaveMode(const char *,CRGB*);
+
+    explicit WaveMode(CRGB*_leds);
 };

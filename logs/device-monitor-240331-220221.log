@@ -1,0 +1,77 @@
+[37m[  3595][I][WebSocketConnection.cpp:14] OnNewEvent(): WebSocketClient #1 connected from 192.168.0.15
+[  3597][W][AsyncTCP.cpp:930] _poll(): pcb is NULL
+[37m[[37m [37m43422][I][m[37ma[37min.cpp:92] [37mh[37mandleWebSo[37mc[37mket(): webs[37mo[37mcket: brig[37mh[37mtness
+[ 43[37m4[37m23][I][mai[37mn[37m.cpp:96] ha[37mn[37mdleWebSock[37me[37mt(): websoc[37mk[37met: New st[37mr[37meam: "brigh[37mt[37mness"
+[ 43[37m4[37m25][I][mai[37mn[37m.cpp:92] ha[37mn[37mdleWebSock[37me[37mt(): websoc[37mk[37met: 44
+[ [37m4[37m3430][I][main.cpp:92] handleWebSocket(): websocket: 51
+[ 43435][I][main.cpp:92] handleWebSocket(): websocket: 77[37m
+[ 43443][I][37m[[37mmain.cpp:9[37m2[37m] handleWeb[37mS[37mocket(): we[37mb[37msocket: 10[37m6[37m
+[ 43446][[37mI[37m][main.cpp[37m:[37m92] handleW[37me[37mbSocket():[37m [37mwebsocket:[37m [37m141
+[ 4345[37m1[37m][I][main.c[37mp[37mp:92] hand[37ml[37meWebSocket([37m)[37m: websocke[37mt[37m: 166
+[ 43[37m4[37m56][I][mai[37mn[37m.cpp:92] ha[37mn[37mdleWebSock[37me[37mt(): websoc[37mk[37met: 191
+[ [37m4[37m3464][I][m[37ma[37min.cpp:92][37m [37mhandleWebSo[37mc[37mket(): web[37ms[37mocket: 199[37m
+[37m[[37m [37m43477][37m[[37mI][main.cp[37mp[37m:92] handle[37mW[37mebSocket():[37m [37mwebsocket:[37m [37m201
+[37m[[37m [37m43495][I][m[37ma[37min.cpp:92][37m [37mhandleWebSo[37mc[37mket(): web[37ms[37mocket: 203[37m
+[37m[[37m 43702][I][main.cpp:92] handleWebSocket(): websocket: 199
+[[37m 4[37m3[37m708][I][mai[37mn[37m.cpp:92] h[37ma[37mndleWebSock[37me[37mt(): webso[37mc[37mket: 180
+[[37m [37m43708][I][[37mm[37main.cpp:92][37m [37mhandleWebS[37mo[37mcket(): web[37ms[37mocket: 148[37m[37m
+[ 43708][I[37m][37m[main.cpp:[37m9[37m2] handleWe[37mb[37mSocket(): [37mw[37mebsocket: 8[37m6[37m
+[ 43716][[37mI[37m][main.cpp[37m:[37m92] handleW[37me[37mbSocket():[37m [37mwebsocket: 47
+[ 43720][I][main.cp[37mp[37m:92] handleWebSocket(): websocket: 28
+[ 43725][I][main.[37mc[37mpp:92] hand[37ml[37meWebSocket[37m([37m): websocke[37mt[37m: 21
+[37m[[37m [37m44010][I][ma[37mi[37mn.cpp:92] [37mh[37mandleWebSoc[37mk[37met(): webs[37mo[37mcket: 24
+[[37m [37m44015][I][[37mm[37main.cpp:92][37m [37mhandleWebS[37mo[37mcket(): web[37ms[37mocket: 42
+[37m[[37m 44015][I][37m[[37mmain.cpp:9[37m2[37m] handleWeb[37mS[37mocket(): w[37me[37mbsocket: 65[37m[37m
+[ 44015][[37mI[37m][main.cpp:[37m9[37m2] handleWe[37mb[37mSocket(): [37mw[37mebsocket: 1[37m0[37m7
+[ 44022[37m][37m[I][main.c[37mp[37mp:92] handl[37me[37mWebSocket()[37m:[37m websocket[37m:[37m 130
+[ 440[37m2[37m5][I][main[37m.[37mcpp:92] han[37md[37mleWebSocke[37mt[37m(): websock[37me[37mt: 146
+[ [37m4[37m4030][I][ma[37mi[37mn.cpp:92] [37mh[37mandleWebSoc[37mk[37met(): webs[37mo[37mcket: 161
+[37m[[37m 44046][I][37m[[37mmain.cpp:92[37m][37m handleWeb[37mS[37mocket(): we[37mb[37msocket: 162[37m[37m
+[37m[[37m 4[37m4[37m102][I][ma[37mi[37mn.cpp:92] h[37ma[37mndleWebSoc[37mk[37met(): webso[37mc[37mket: 164
+[37m[[37m 4[37m4[37m215][I][ma[37mi[37mn.cpp:92] h[37ma[37mndleWebSoc[37mk[37met(): webso[37mc[37mket: 171
+[37m[[37m [37m44220][[37mI[37m][main.cpp:[37m9[37m2] handleW[37me[37mbSocket(): [37mw[37mebsocket: [37m1[37m85
+[ 44225[37m][37m[I][main.c[37mp[37mp:92] handl[37me[37mWebSocket([37m)[37m: websocket[37m:[37m 203
+[ 442[37m2[37m5][I][main[37m.[37mcpp:92] ha[37mn[37mdleWebSocke[37mt[37m(): websoc[37mk[37met: 212
+[ [37m4[37m4227][I][ma[37mi[37mn.cpp:92] [37mh[37mandleWebSoc[37mk[37met(): webs[37mo[37mcket: 219
+[37m[[37m 44232][I][37m[[37mmain.cpp:92[37m][37m handleWeb[37mS[37mocket(): we[37mb[37msocket: 22[37m1[37m
+[ 44237][[37mI[37m][main.cpp[37m:[37m92] handleW[37me[37mbSocket(): [37mw[37mebsocket: [37m2[37m26
+[ 4424[37m3[37m][I][main.c[37mp[37mp:92] hand[37ml[37meWebSocket([37m)[37m: websocke[37mt[37m: 233
+[ 44[37m2[37m50][I][mai[37mn[37m.cpp:92] ha[37mn[37mdleWebSock[37me[37mt(): websoc[37mk[37met: 238
+[37m[[37m [37m4[37m4266][I[37m][37m[main.cpp:9[37m2[37m] handleWeb[37mS[37mocket(): w[37me[37mbsocket: 2[37m4[37m5
+[37m[[37m 4[37m4[37m282][I][ma[37mi[37mn.cpp:92] h[37ma[37mndleWebSock[37me[37mt(): webso[37mc[37mket: 247
+[37m[[37m [37m443[37m0[37m2][I][main.[37mc[37mpp:92] hand[37ml[37meWebSocket[37m([37m): websocke[37mt[37m: 249
+[37m[[37m [37m444[37m1[37m9][I][main[37m.[37mcpp:92] ha[37mn[37mdleWebSocke[37mt[37m(): websock[37me[37mt: 245
+[ [37m4[37m4421][I][ma[37mi[37mn.cpp:92] [37mh[37mandleWebSoc[37mk[37met(): webs[37mo[37mcket: 231
+[37m[[37m 44429][I][37m[[37mmain.cpp:92[37m][37m handleWeb[37mS[37mocket(): we[37mb[37msocket: 20[37m3[37m
+[37m[[37m [37m44442][I][37m[[37mmain.cpp:9[37m2[37m] handleWeb[37mS[37mocket(): w[37me[37mbsocket: 14[37m3[37m
+[37m[[37m [37m44[37m4[37m60][I][mai[37mn[37m.cpp:92] ha[37mn[37mdleWebSock[37me[37mt(): websoc[37mk[37met: 111
+[37m[[37m [37m44479[37m][37m[I][main.cp[37mp[37m:92] handl[37me[37mWebSocket()[37m:[37m websocket[37m:[37m 65
+[37m[[37m [37m444[37m9[37m5][I][main.[37mc[37mpp:92] han[37md[37mleWebSocket[37m([37m): websocke[37mt[37m: 49
+[37m[[37m [37m44510][I][37m[[37mmain.cpp:9[37m2[37m] handleWeb[37mS[37mocket(): w[37me[37mbsocket: 40[37m[37m
+[37m[[37m [37m44530][I[37m][37m[main.cpp:[37m9[37m2] handleWe[37mb[37mSocket(): [37mw[37mebsocket: 2[37m8[37m
+[37m[[37m [37m445[37m4[37m5][I][main[37m.[37mcpp:92] ha[37mn[37mdleWebSocke[37mt[37m(): websock[37me[37mt: 22
+[37m[[37m [37m44561][I][ma[37mi[37mn.cpp:92] [37mh[37mandleWebSoc[37mk[37met(): webso[37mc[37mket: 19
+[37m[[37m [37m44583][I[37m][37m[main.cpp[37m:[37m92] handleW[37me[37mbSocket():[37m [37mwebsocket: [37m1[37m7
+[37m[[37m 44726][I][[37mmain.cpp:92][37m [37mhandleWebS[37mo[37mcket(): web[37ms[37mocket: 15[37m
+[37m[ 44729][I][37m[[37mmain.cpp:9[37m2[37m] handleWeb[37mS[37mocket(): we[37mb[37msocket: 12[37m[37m
+[ 44730][I[37m][37m[main.cpp:[37m9[37m2] handleWe[37mb[37mSocket(): [37mw[37mebsocket: [37m1[37m0
+[ 44737][37m[[37mI][main.cp[37mp[37m:92] handle[37mW[37mebSocket()[37m:[37m websocket:[37m [37m12
+[37m[[37m [37m44753[37m][37m[I][main.cp[37mp[37m:92] handl[37me[37mWebSocket()[37m:[37m websocket:[37m [37m]
+[37m[[37m [37m45994][I][Mo[37md[37meHandler.[37mc[37mpp:22] lig[37mh[37mtSwitch(): [37ml[37might switch[37m:[37m 1
+[37m[[37m [37m47188][I[37m][37m[ModeHandl[37me[37mr.cpp:22] [37ml[37mightSwitch([37m)[37m: light sw[37mi[37mtch: 0
+[37m[[37m357[37m7[37m58][V][WiFi[37mG[37meneric.cpp:[37m3[37m62] _ardui[37mn[37mo_event_cb([37m)[37m: STA Disc[37mo[37mnnected: SS[37mI[37mD: RT-GPON[37m-[37mDFCF, BSSID[37m:[37m 58:f8:5c:[37m2[37m4:df:cf, Re[37ma[37mson: 7
+[35[37m7[37m759][D][Wi[37mF[37miGeneric.c[37mp[37mp:1039] _ev[37me[37mntCallback[37m([37m): Arduino [37mE[37mvent: 5 - [37mS[37mTA_DISCONNE[37mC[37mTED
+[3577[37m6[37m7][W][WiFiG[37me[37mneric.cpp:1[37m0[37m61] _event[37mC[37mallback():[37m [37mReason: 7 -[37m [37mNOT_ASSOCED[37m[37m
+[357774][[37mD[37m][WiFiGener[37mi[37mc.cpp:1081[37m][37m _eventCall[37mb[37mack(): WiF[37mi[37m Reconnect [37mR[37munning
+[3[37m5[37m7781][I][We[37mb[37mSocketConn[37me[37mction.cpp:2[37m3[37m] [357784][[37mV[37m][WiFiGene[37mr[37mic.cpp:97][37m [37mset_esp_int[37me[37mrface_ip():[37m [37mConfigurin[37mg[37m Station s[37mt[37matic IP: 0.[37m0[37m.0.0, MASK:[37m [37m0.0.0.0, G[37mW[37m: 0.0.0.0
+[37mO[37mnNewEvent([37m)[37m: WebSocket[37mC[37mlient #1 d[37mi[37msconnected[37m
+[37m[[37m3[37m57844][[37mV[37m][WiFiGen[37me[37mric.cpp:355[37m][37m _arduino_[37me[37mvent_cb(): [37mS[37mTA Connect[37me[37md: SSID: RT[37m-[37mGPON-DFCF,[37m [37mBSSID: 58:f[37m8[37m:5c:24:df:[37mc[37mf, Channel:[37m [37m10, Auth: [37mW[37mPA_WPA2_PSK[37m[37m
+[357847][[37mD[37m][WiFiGener[37mi[37mc.cpp:1039[37m][37m _eventCall[37mb[37mack(): Ard[37mu[37mino Event: [37m4[37m - STA_CONN[37mE[37mCTED
+[37m[[37m3[37m58036][V][WiFiGeneric.cpp:369] _arduino_event_cb(): STA Got Same IP:192.168.[37m0.2
+[35803[37m7[37m][D][WiFiGe[37mn[37meric.cpp:1[37m0[37m39] _event[37mC[37mallback(): [37mA[37mrduino Even[37mt[37m: 7 - STA_[37mG[37mOT_IP
+[358[37m0[37m40][D][WiF[37mi[37mGeneric.cpp[37m:[37m1102] _eve[37mn[37mtCallback()[37m:[37m STA IP: 1[37m9[37m2.168.0.2, [37mM[37mASK: 255.2[37m5[37m5.255.0, GW[37m:[37m 192.168.0[37m.[37m1
+[37m[[37m3[37m62174][37m[[37mI][WebSock[37me[37mtConnection[37m.[37mcpp:14] On[37mN[37mewEvent(): [37mW[37mebSocketCl[37mi[37ment #2 conn[37me[37mcted from 1[37m9[37m2.168.0.15[37m[37m
+[37m[[37m3[37m62315][W][As[37my[37mncTCP.cpp:[37m9[37m30] _poll()[37m:[37m pcb is NUL[37mL[37m
+[362316][37m[[37mW][AsyncTC[37mP[37m.cpp:930] _[37mp[37moll(): pcb[37m [37mis NULL
+[3[37m6[37m2316][W][A[37ms[37myncTCP.cpp:[37m9[37m30] _poll()[37m:[37m pcb is NU[37mL[37mL
+[37m[[37m3[37m63016][W][[37mA[37msyncTCP.cpp[37m:[37m930] _poll[37m([37m): pcb is N[37mU[37mLL

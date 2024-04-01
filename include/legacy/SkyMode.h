@@ -5,31 +5,29 @@
 class SkyMode : public LumifyMode
 {
 private:
-    bool edit_mode;
-    int sunrise_point;
-    int sunset_point;
-    float speed;
+    bool editMode{};
+    int sunrisePoint{};
+    int sunsetPoint{};
+    float speed{};
 
-    unsigned long sunrise_start_time;
-    unsigned long last_time = 0UL;
+    unsigned long sunriseStartTimeMillis{};
+    unsigned long lastTimeMillis = 0UL;
 
-    float SecondsSinceSunriseStart = 0.0F;
+    void showEditMode();
+    void showSunriseLight(float);
+    void showSunriseSun(float);
+    void tiltColors(float);
 
-    void ShowEditMode();
-    void ShowSunriseLight(float);
-    void ShowSunriseSun(float);
-    void TiltColors(float);
+    CRGB SUN_COLOR{};
+    CRGB SKY_COLOR{};
 
-    CRGB SUN_COLOR;
-    CRGB SKY_COLOR;
-
-    float skyHue;
-    float skyValue;
+    float skyHue{};
+    float skyValue{};
 
 public:
     void update() override;
-    void updateArgs(const char *) override;
+    void updateArgs(const JsonVariant &args) override;
     void updateArg(const char *arg, const char *value) override;
-    SkyMode(CRGB*);
-    SkyMode(const char *,CRGB*);
+
+    explicit SkyMode(CRGB *_leds);
 };

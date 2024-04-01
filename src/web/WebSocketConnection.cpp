@@ -34,12 +34,12 @@ void WebSocketConnection::OnNewEvent(AsyncWebSocket *server, AsyncWebSocketClien
     }
 }
 
-void WebSocketConnection::handleWebSocketMessage(void *arg, uint8_t *data, size_t len, AsyncWebSocket *socket)
+void WebSocketConnection::handleWebSocketMessage(void *arg, uint8_t *data, size_t len, AsyncWebSocket *socket) const
 {
     if (OnNewMessage == NULL)
         return;
 
-    AwsFrameInfo *info = (AwsFrameInfo *)arg;
+    auto *info = static_cast<AwsFrameInfo *>(arg);
     if (info->opcode != WS_TEXT)
         return;
 
@@ -49,8 +49,6 @@ void WebSocketConnection::handleWebSocketMessage(void *arg, uint8_t *data, size_
 #endif
 
     OnNewMessage((char *)data);
-
-    return;
 }
 
 WebSocketConnection::WebSocketConnection(AsyncWebServer *server, const char *uri)

@@ -1,0 +1,166 @@
+[37m)
+configsip: 0, SPIWP:[   108][I][WifiManager.cpp:14] trySTA(): WifiManager Wifi credentials: RT-GPON-DFCF upe8FgEBuD, Connecting to Wifi... 
+[   147][D][WiFiGeneric.cpp:1039] _eventCallback(): Arduino Event: 0 - WIFI_READY
+[   291][I][ModeHandler.cpp:56] updateMode(): Changed mode to id: 1
+[   291][I][ModeHandler.cpp:22] lightSwitch(): light switch: 0
+
+assert failed: spinlock_acquire spinlock.h:122 (result == core_id || result == SPINLOCK_FREE)
+
+
+Backtrace: 0x400838cd:0x3ffb2080 0x4008b64d:0x3ffb20a0 0x40090c19:0x3ffb20c0 0x4008ea87:0x3ffb21f0 0x4008c742:0x3ffb2230 0x400d64e9:0x3ffb2270 0x400e55c6:0x3ffb2290
+
+  #0  0x400838cd:0x3ffb2080 in panic_abort at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/esp_system/panic.c:408
+  #1  0x4008b64d:0x3ffb20a0 in esp_system_abort at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/esp_system/esp_system.c:137
+  #2  0x40090c19:0x3ffb20c0 in __assert_func at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/newlib/assert.c:85
+  #3  0x4008ea87:0x3ffb21f0 in spinlock_acquire at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/esp_hw_support/include/soc/spinlock.h:122
+      (inlined by) xPortEnterCriticalTimeout at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/freertos/port/xtensa/port.c:301
+  #4  0x4008c742:0x3ffb2230 in vPortEnterCritical at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/freertos/port/xtensa/include/freertos/portmacro.h:578
+      (inlined by) xQueueSemaphoreTake at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/freertos/queue.c:1563
+  #5  0x400d64e9:0x3ffb2270 in setup() at src/main.cpp:60
+  #6  0x400e55c6:0x3ffb2290 in loopTask(void*) at C:/Users/huji/.platformio/packages/framework-arduinoespressif32/cores/esp32/main.cpp:42
+
+
+
+
+ELF file SHA256: f2adec152b97bfe2
+
+Rebooting...
+ets Jul 29 2019 12:21:46
+
+rst:0xc (SW_CPU_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+[   108][I][WifiManager.cpp:14] trySTA(): WifiManager Wifi credentials: RT-GPON-DFCF upe8FgEBuD, Connecting to Wifi... 
+[   146][D][WiFiGeneric.cpp:1039] _eventCallback(): Arduino Event: 0 - WIFI_READY
+[37m[   291][I][ModeHandler.cpp:56] updateMode(): Changed mode to id: 1
+[   291][I][ModeHandler.cpp:22] lightSwitch(): light switch: 0
+
+assert failed: spinlock_acquire spinlock.h:122 (result == core_id || result == SPINLOCK_FREE)
+
+
+Backtrace: 0x400838cd:0x3ffb2080 0x4008b64d:0x3ffb20a0 0x40090c19:0x3ffb20c0 0x4008ea87:0x3ffb21f0 0x4008c742:0x3ffb2230 0x400d64e9:0x3ffb2270 0x400e55c6:0x3ffb2290
+
+  #0  0x400838cd:0x3ffb2080 in panic_abort at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/esp_system/panic.c:408
+  #1  0x4008b64d:0x3ffb20a0 in esp_system_abort at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/esp_system/esp_system.c:137
+  #2  0x40090c19:0x3ffb20c0 in __assert_func at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/newlib/assert.c:85
+  #3  0x4008ea87:0x3ffb21f0 in spinlock_acquire at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/esp_hw_support/include/soc/spinlock.h:122
+      (inlined by) xPortEnterCriticalTimeout at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/freertos/port/xtensa/port.c:301
+  #4  0x4008c742:0x3ffb2230 in vPortEnterCritical at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/freertos/port/xtensa/include/freertos/portmacro.h:578
+      (inlined by) xQueueSemaphoreTake at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/freertos/queue.c:1563
+  #5  0x400d64e9:0x3ffb2270 in setup() at src/main.cpp:60
+  #6  0x400e55c6:0x3ffb2290 in loopTask(void*) at C:/Users/huji/.platformio/packages/framework-arduinoespressif32/cores/esp32/main.cpp:42
+
+
+
+
+ELF file SHA256: f2adec152b97bfe2
+
+[37mRebooting...
+ets Jul 29 2019 12:21:46
+
+rst:0xc (SW_CPU_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+[37m[[37m [37m  108][I][W[37mi[37mfiManager.[37mc[37mpp:14] tryS[37mT[37mA(): WifiM[37ma[37mnager Wifi[37m [37mcredentials[37m:[37m RT-GPON-DF[37mC[37mF upe8FgEB[37mu[37mD, Connecti[37mn[37mg to Wifi.[37m.[37m. 
+[37m[   146][D][WiFiGeneric.cpp:1039] _eventCallback(): Arduino Event: 0 - WIFI_READY
+[37m[[37m [37m  290][[37mI[37m][ModeHand[37ml[37mer.cpp:56] [37mu[37mpdateMode()[37m:[37m Changed m[37mo[37mde to id: 1
+[   291][[37mI[37m][ModeHandler.cpp:22] lightSwitch([37m)[37m: light sw[37mi[37mtch: 0
+Gur[37mu Meditatio[37mn[37m Error: Core  1 panic'ed (StoreProhibited). Exception was unhandled.
+
+Core  1 register du[37mmp:
+PC      : 0x4008cb4[37mb  PS      : 0x00060630  A0      : 0x800d64ec  A1      : 0x3ffb2230  
+A2      : 0x00000000  A3      : 0x3ffc4788  A4      : 0x3ffc4780  A5      : 0x3ffb9988  
+A6      : 0x007bf528  A7      : 0x003fffff  A8      : 0x8008cb46  A9      : 0x3ffb2190  
+A10     : 0x3ffd1600  A11     : 0x3ffd16cc  A12     : 0x3ffd16c0  A13     : 0x3ffd1600  
+A14     : 0x00000017  A15     : 0x00000000  SAR   [37m  : 0x0000001e  EXCCAUSE: 0x0000001d  
+EXCVADDR: 0x003fffff  LBEG    : 0x40089a74  LEND    : 0x40089a8a  LCOUNT  : 0xffffffff  
+
+
+Backtrace: 0x4008cb48:0x3ffb2230 0x400d[37m64e9:0x3ffb2270 0x400e55c6:0x3ffb2290
+
+  #0  0x4008cb48:0x3ffb2230 in prvInitialiseNewTask at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/freertos/tasks.c:1170
+  #1  0x400d64e9:0x3ffb2270 in setup() at src/main.cpp:60
+  #2  0x400e55c6:0x3ffb2290 in loopTask(void*) at C:/Users/huji/.platformio/packages/framework-arduinoespressif32/cores/esp32/main.cpp:42
+
+
+
+
+ELF file SHA256: f2adec152b97bfe2
+
+[37mRebooting...
+ets Jul 29 2019 12:21:46
+
+rst:0xc (SW_CPU_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+[37m[[37m [37m  107][37m[[37mI][WifiMa[37mn[37mager.cpp:14[37m][37m trySTA():[37m [37mWifiManager[37m [37mWifi crede[37mn[37mtials: RT-G[37mP[37mON-DFCF upe[37m8[37mFgEBuD, Co[37mn[37mnecting to[37m [37mWifi... 
+[37m[[37m [37m  145[37m][37m[D][WiFiGen[37me[37mric.cpp:103[37m9[37m] _eventCa[37ml[37mlback(): Ar[37md[37muino Event[37m:[37m 0 - WIFI_[37mR[37mEADY
+[37m[[37m [37m  2[37m9[37m0][I][ModeH[37ma[37mndler.cpp:[37m5[37m6] updateMo[37md[37me(): Chang[37me[37md mode to i[37md[37m: 1
+[   2[37m90][I][ModeHandler.cpp:[37m2[37m2] lightSwi[37mt[37mch(): light switch: 0
+
+assert failed: spinlock_acquire spinlock.h:[37m1[37m22 (result == core_id || result == SPINLOCK_FREE)
+
+
+B[37ma[37mcktrace: 0x400838cd:0x3ffb2080 0x4008b64d:0x3f[37mf[37mb20a0 0x40[37m0[37m90c19:0x3ff[37mb[37m20c0 0x400[37m8[37mea87:0x3ffb[37m2[37m1f0 0x4008c[37m7[37m42:0x3ffb2[37m2[37m30 0x400d6[37m4[37me9:0x3ffb22[37m7[37m0 0x400e55[37mc[37m6:0x3ffb229[37m0[37m
+
+  #0  0x400838cd:0x3ffb2080 in panic_abort at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/esp_system/panic.c:408
+  #1  0x4008b64d:0x3ffb20a0 in esp_system_abort at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/esp_system/esp_system.c:137
+  #2  0x40090c19:0x3ffb20c0 in __assert_func at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/newlib/assert.c:85
+  #3  0x4008ea87:0x3ffb21f0 in spinlock_acquire at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/esp_hw_support/include/soc/spinlock.h:122
+      (inlined by) xPortEnterCriticalTimeout at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/freertos/port/xtensa/port.c:301
+  #4  0x4008c742:0x3ffb2230 in vPortEnterCritical at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/freertos/port/xtensa/include/freertos/portmacro.h:578
+      (inlined by) xQueueSemaphoreTake at /Users/ficeto/Desktop/ESP32/ESP32S2/esp-idf-public/components/freertos/queue.c:1563
+  #5  0x400d64e9:0x3ffb2270 in setup() at src/main.cpp:60
+  #6  0x400e55c6:0x3ffb2290 in loopTask(void*) at C:/Users/huji/.platformio/packages/framework-arduinoespressif32/cores/esp32/main.cpp:42
+
+
+
+
+[37mELF file SHA256: f2adec152b97bfe2
+
+Rebooting...
+ets Jul 29 2019 12:21:46
+
+rst:0xc (SW_CPU_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1184
+load:0x40078000,len:13232
+load:0x40080400,len:3028
+entry 0x400805e4
+[37m[[37m   108][I][WifiManager.cpp:14] trySTA(): WifiManager Wifi credentials: RT-GPON[37m-DFCF upe8F[37mg[37mEBuD, Conne[37mc[37mting to Wif[37mi[37m... 
+[37m[[37m [37m  145][D][W[37mi[37mFiGeneric.c[37mp[37mp:1039] _e[37mv[37mentCallback[37m([37m): Arduino[37m [37mEvent: 0 - [37mW[37mIFI_READY[37m
+[37m[[37m   291][I][37m[ModeHandle[37mr[37m.cpp:56] u[37mp[37mdateMode():[37m [37mChanged mo[37md[37me to id: 1[37m
+[37m[   291][I][37m[[37mModeHandle[37mr[37m.cpp:22] l[37mi[37mghtSwitch()[37m:[37m light swi[37mt[37mch: 0
+[37m[[37m [37m  322][V][37m[[37mWiFiGeneri[37mc[37m.cpp:340] _[37ma[37mrduino_even[37mt[37m_cb(): STA[37m [37mStarted
+[ [37m [37m 323][D][W[37mi[37mFiGeneric.c[37mp[37mp:1039] _e[37mv[37mentCallback[37m([37m): Arduino[37m [37mEvent: 2 - [37mS[37mTA_START
+[37m[[37m   332][V][[37mW[37miFiGeneric[37m.[37mcpp:97] set[37m_[37mesp_interf[37ma[37mce_ip(): Co[37mn[37mfiguring S[37mt[37mation stati[37mc[37m IP: 0.0.0.[37m0[37m, MASK: 0.[37m0[37m.0.0, GW: 0[37m.[37m0.0.0
+[37m[[37m [37m  [37m3[37m95][V][WiFi[37mG[37meneric.cpp[37m:[37m355] _ardui[37mn[37mo_event_cb[37m([37m): STA Conn[37me[37mcted: SSID[37m:[37m RT-GPON-DF[37mC[37mF, BSSID: [37m5[37m8:f8:5c:24:[37md[37mf:cf, Chan[37mn[37mel: 10, Aut[37mh[37m: WPA_WPA2[37m_[37mPSK
+[   39[37m7[37m][D][WiFiG[37me[37mneric.cpp:1[37m0[37m39] _eventC[37ma[37mllback(): [37mA[37mrduino Even[37mt[37m: 4 - STA_[37mC[37mONNECTED
+[37m[[37m [37m  706][V][Wi[37mF[37miGeneric.c[37mp[37mp:369] _ard[37mu[37mino_event_c[37mb[37m(): STA Go[37mt[37m New IP:192[37m.[37m168.0.2
+[[37m [37m  707][D][W[37mi[37mFiGeneric.[37mc[37mpp:1039] _e[37mv[37mentCallbac[37mk[37m(): Arduino[37m [37mEvent: 7 -[37m [37mSTA_GOT_IP[37m
+[37m[   710][D[37m][37m[WiFiGeneri[37mc[37m.cpp:1102][37m [37m_eventCallb[37ma[37mck(): STA [37mI[37mP: 192.168.[37m0[37m.2, MASK: [37m2[37m55.255.255.[37m0[37m, GW: 192.[37m1[37m68.0.1
+[37m[[37m [37m  757[37m][37m[V][WifiMan[37ma[37mger.cpp:28[37m][37m trySTA(): [37mW[37mifiManager[37m [37mAttempt 0: [37mW[37mL_CONNECTE[37mD[37m
+[   757][[37mI[37m][WifiManag[37me[37mr.cpp:39] [37mt[37mrySTA(): Wi[37mf[37miManager s[37mu[37mccess!
+[  [37m [37m759][I][ma[37mi[37mn.cpp:15] [37mw[37mifiConnecti[37mo[37mnCallback()[37m:[37m wifi_even[37mt[37m: WL_CONNEC[37mT[37mED
+[   76[37m5[37m][I][main.c[37mp[37mp:17] wifi[37mC[37monnectionCa[37ml[37mlback(): l[37mo[37mcal-ip: 192[37m.[37m168.0.2
+[37m[[37m [37m23208][I[37m][37m[WebSocket[37mC[37monnection.c[37mp[37mp:14] OnNew[37mE[37mvent(): We[37mb[37mSocketClien[37mt[37m #1 connec[37mt[37med from 192[37m.[37m168.0.15
+[37m[[37m 23430][W][A[37msyncTCP.cpp:[37m9[37m30] _poll()[37m:[37m pcb is NU[37mL[37mL
+[ 23431[37m][37m[W][AsyncTC[37mP[37m.cpp:930] _[37mp[37moll(): pcb[37m [37mis NULL
+[37m[[37m [37m24053][[37mW[37m][AsyncTCP.[37mc[37mpp:930] _p[37mo[37mll(): pcb i[37ms[37m NULL

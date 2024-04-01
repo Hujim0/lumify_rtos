@@ -5,17 +5,17 @@
 class RainbowMode : public LumifyMode
 {
 private:
-    float hue;
-    bool reversed;
-    float hueConst;
+    float hue{};
+    bool reversed{};
+    float hueConst{};
 
-    float speed;
-    int count;
+    float speed{};
+    int count{};
 
 public:
     void update() override;
-    void updateArgs(const char *data) override;
+    void updateArgs(const JsonVariant &args) override;
     void updateArg(const char *arg, const char *value) override;
-    RainbowMode(CRGB *);
-    RainbowMode(const char *,CRGB *);
+
+    explicit RainbowMode(CRGB*_leds);
 };

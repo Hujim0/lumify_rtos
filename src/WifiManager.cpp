@@ -9,11 +9,11 @@
  *
  * @return WL_CONNECTED - connected; WL_NO_SSID_AVAIL - returns after first attempt, wifi doesn't exists.
  */
-wl_status_t WifiManager::trySTA(const WifiCredentials &creds)
+wl_status_t WifiManager::trySTA(WifiCredentials creds)
 {
-    log_i(TAG "Wifi credentials: %s %s, Connecting to Wifi... ", creds.ssid, creds.pw);
+    log_i(TAG "Wifi credentials: %s %s, Connecting to Wifi... ", creds.ssid.c_str(), creds.pw.c_str());
 
-    WiFi.mode(WiFiMode_t::WIFI_STA);
+//    WiFiClass::mode(WiFiMode_t::WIFI_STA);
 
     wl_status_t status = wl_status_t::WL_IDLE_STATUS;
 
@@ -23,7 +23,7 @@ wl_status_t WifiManager::trySTA(const WifiCredentials &creds)
 
     while (attempt <= MAX_ATTEMPT_COUNT)
     {
-        status = (wl_status_t)WiFi.waitForConnectResult();
+        status = (wl_status_t)WiFi.waitForConnectResult(5000);
 
         log_v(TAG "Attempt %i: %s", attempt, wl_status_tToString[status]);
 
@@ -49,7 +49,7 @@ wl_status_t WifiManager::trySTA(const WifiCredentials &creds)
         {
             attempt += 1;
 
-            WiFi.reconnect();
+//            WiFi.reconnect();
         }
         }
     }
@@ -59,9 +59,9 @@ wl_status_t WifiManager::trySTA(const WifiCredentials &creds)
 
 void WifiManager::connectionTask(void *pvParameters)
 {
-    WifiCredentials *creds = static_cast<WifiCredentials *>(pvParameters);
+    auto creds = static_cast<WifiCredentials *>(pvParameters);
 
-    wl_status_t res = WifiManager::trySTA(*creds);
+    wl_status_t res = WifiManager::trySTA(std::move(*creds));
 
     delete creds;
 
@@ -80,7 +80,7 @@ void WifiManager::createConnectionTask(WifiCredentials *creds)
     xTaskCreatePinnedToCore(
         &connectionTask,
         "wifi_connection",
-        10000,
+        10240,
         creds,
         1,
         nullptr,
@@ -89,5 +89,5 @@ void WifiManager::createConnectionTask(WifiCredentials *creds)
 
 void WifiManager::raiseWifiEvent(wl_status_t res)
 {
-    esp_event_post(WIFI_EVENT, res, NULL, 0, TICKS_TO_WAIT);
+    esp_event_post(WIFI_EVENT, res, nullptr, 0, TICKS_TO_WAIT);
 }
