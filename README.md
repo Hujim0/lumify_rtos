@@ -4,7 +4,7 @@ Control LED Strip from your server on local network
 
 USED HARDWARE:
 - LED strip WS2812B
-- main board: ESP 12-E
+- main board: ESP 32
 - external DC that would power your whole system 
 
 HARDWARE CONNECTIONS:
@@ -30,10 +30,9 @@ library dependencies:
 - FastLED
 - ArduinoJSON
 - AsyncTCP
-- AsyncServer
+- AsyncWebServer
 - LittleFS
 
 CONFIGURE:
 - go to data/wifi_settings.txt and change first and second lines to network name and password, dont forget that name and password should go on diffrent lines
 - read Serial monitor to debug
-- go to data/index.html to change your page, dont forget to build your system image through SPIFFS
